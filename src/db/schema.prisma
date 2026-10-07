@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   String        @id @default(cuid())
+  email                String        @unique
+  name                 String
+  isVerified           Boolean       @default(false)
+  parentStatus         ParentStatus  @default(NONE)
+  accessibility        String?
+  bio                  String
+  needs                UserNeed[]
+  offers               UserOffer[]
+  sentInteractions     Interaction[] @relation("Sender")
+  receivedInteractions Interaction[] @relation("Receiver")
+  createdAt            DateTime      @default(now())
+}
+
+model TaskAidPost {
+  id          String       @id @default(cuid())
+  authorId    String
+  title       String
+  description String
+  category    TaskCategory
+  status      TaskStatus   @default(OPEN)
+  latitude    Float
+  longitude   Float
+  createdAt   DateTime     @default(now())
+}
+
+model UserNeed {
+  id       String       @id @default(cuid())
+  userId   String
+  user     User         @relation(fields: [userId], references: [id])
+  category TaskCategory
+}
+
+model UserOffer {
+  id       String       @id @default(cuid())
+  userId   String
+  user     User         @relation(fields: [userId], references: [id])
+  category TaskCategory
+}
+
+model Interaction {
+  id         String   @id @default(cuid())
+  senderId   String
+  sender     User     @relation("Sender", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+enum ParentStatus {
+  NONE
+  SOLO_PARENT
+  CO_PARENT
+  LOOKING_TO_START_FAMILY
+}
+
+enum TaskCategory {
+  HOME_REPAIR
+  MEAL_SUPPORT
+  TRANSPORTATION
+  ERRANDS
+  TUTORING
+  MOBILITY_ASSISTANCE
+}
+
+enum TaskStatus {
+  OPEN
+  MATCHED
+  COMPLETED
+}
