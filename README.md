@@ -1,30 +1,8 @@
-# Thresh
-thresh/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── CODE_OF_CONDUCT.md
-│   └── SAFEGUARDS.md
-├── src/
-│   ├── app/                 # Next.js / React Native interface
-│   ├── components/          # Accessible UI components (WCAG AAA)
-│   ├── server/              # API routes & trpc/REST handlers
-│   └── db/
-│       ├── schema.prisma    # or schema.sql (PostgreSQL)
-│       └── migrations/
-├── .env.example
-├── .gitignore
-├── LICENSE
-└── README.md
-README.md
-Markdown
 # Thresh (🌾)
 
 > **Real-action matchmaking, mutual aid, and community infrastructure.**
 
-Modern dating platforms turn human connection into a disposable catalog. They exploit isolation, leaving single parents to carry households alone, fathers alienated from home, and disabled adults sidelined by superficial algorithms. 
+Modern dating platforms turn human connection into a disposable catalog. They exploit isolation, leaving single parents to carry households alone, fathers alienated from home, and disabled adults sidelined by superficial algorithms.
 
 **Thresh** is open-source social infrastructure engineered to re-establish the village. It replaces endless swiping with tangible presence: connecting single parents, disabled individuals, and family-oriented singles through practical service, shared responsibilities, and genuine commitment.
 
@@ -77,85 +55,34 @@ Because Thresh directly interfaces with families, homes, and vulnerable individu
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/your-org/thresh.git](https://github.com/your-org/thresh.git)
+   git clone https://github.com/your-org/thresh.git
    cd thresh
-Install dependencies:
+   ```
 
-Bash
-pnpm install
-Configure Environment Variables:
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-Bash
-cp .env.example .env.local
-Provide your database URL, auth secrets, and identity verification API keys.
+3. **Configure Environment Variables:**
+   ```bash
+   cp .env.example .env.local
+   ```
+   Provide your database URL, auth secrets, and identity verification API keys.
 
-Initialize Database:
+4. **Initialize Database:**
+   ```bash
+   pnpm prisma migrate dev --name init
+   pnpm prisma db seed
+   ```
 
-Bash
-pnpm prisma migrate dev --name init
-pnpm prisma db seed
-Run Development Server:
+5. **Run Development Server:**
+   ```bash
+   pnpm dev
+   ```
+   Open http://localhost:3000 in your browser.
 
-Bash
-pnpm dev
-Open http://localhost:3000 in your browser.
+---
 
-📋 Database Schema Preview
-Code snippet
-model User {
-  id              String          @id @default(cuid())
-  email           String          @unique
-  name            String
-  isVerified      Boolean         @default(false)
-  parentStatus    ParentStatus    @default(NONE)
-  accessibility   String?
-  bio             String
-  needs           UserNeed[]
-  offers          UserOffer[]
-  sentInteractions Interaction[]  @relation("Sender")
-  receivedInteractions Interaction[] @relation("Receiver")
-  createdAt       DateTime        @default(now())
-}
-
-model TaskAidPost {
-  id          String      @id @default(cuid())
-  authorId    String
-  title       String
-  description String
-  category    TaskCategory
-  status      TaskStatus  @default(OPEN)
-  latitude    Float
-  longitude   Float
-  createdAt   DateTime    @default(now())
-}
-
-enum ParentStatus {
-  NONE
-  SOLO_PARENT
-  CO_PARENT
-  LOOKING_TO_START_FAMILY
-}
-
-enum TaskCategory {
-  HOME_REPAIR
-  MEAL_SUPPORT
-  TRANSPORTATION
-  ERRANDS
-  TUTORING
-  MOBILITY_ASSISTANCE
-}
-
-enum TaskStatus {
-  OPEN
-  MATCHED
-  COMPLETED
-}
-📜 The Village Code (Code of Conduct)
-Act from Pure Intent: Engage each person with dignity, humility, and absolute respect for their journey and household.
-
-Never Exploit: Help is rendered freely to build real human connection. Coercion, transactional pressure, or entitlement have zero tolerance on this platform.
-
-Protect the Hearth: Users who violate safety measures, post deceitful identities, or endanger household peace are permanently removed.
-
-📄 License
+## 📄 License
 Distributed under the AGPL-3.0 License to ensure that all community infrastructure built upon Thresh remains open, transparent, and non-exploitative.
